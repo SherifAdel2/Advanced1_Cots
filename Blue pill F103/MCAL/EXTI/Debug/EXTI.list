@@ -1,0 +1,737 @@
+
+EXTI.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000130  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         000003a0  08000130  08000130  00001130  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  080004d0  080004d8  000014d8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  080004d0  080004d0  000014d8  2**0
+                  CONTENTS
+  4 .ARM          00000000  080004d0  080004d0  000014d8  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  080004d0  080004d8  000014d8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  080004d0  080004d0  000014d0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  080004d4  080004d4  000014d4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         00000000  20000000  20000000  000014d8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          0000006c  20000000  080004d8  00002000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000604  2000006c  080004d8  0000206c  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000029  00000000  00000000  000014d8  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   000004f9  00000000  00000000  00001501  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_abbrev 000001fa  00000000  00000000  000019fa  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_aranges 000000f0  00000000  00000000  00001bf8  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_rnglists 000000a8  00000000  00000000  00001ce8  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_macro  00001dd9  00000000  00000000  00001d90  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_line   00000e36  00000000  00000000  00003b69  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    00007ff5  00000000  00000000  0000499f  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .comment      00000043  00000000  00000000  0000c994  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  000002b8  00000000  00000000  0000c9d8  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 21 .debug_line_str 00000045  00000000  00000000  0000cc90  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000130 <__do_global_dtors_aux>:
+ 8000130:	b510      	push	{r4, lr}
+ 8000132:	4c05      	ldr	r4, [pc, #20]	@ (8000148 <__do_global_dtors_aux+0x18>)
+ 8000134:	7823      	ldrb	r3, [r4, #0]
+ 8000136:	b933      	cbnz	r3, 8000146 <__do_global_dtors_aux+0x16>
+ 8000138:	4b04      	ldr	r3, [pc, #16]	@ (800014c <__do_global_dtors_aux+0x1c>)
+ 800013a:	b113      	cbz	r3, 8000142 <__do_global_dtors_aux+0x12>
+ 800013c:	4804      	ldr	r0, [pc, #16]	@ (8000150 <__do_global_dtors_aux+0x20>)
+ 800013e:	f3af 8000 	nop.w
+ 8000142:	2301      	movs	r3, #1
+ 8000144:	7023      	strb	r3, [r4, #0]
+ 8000146:	bd10      	pop	{r4, pc}
+ 8000148:	20000000 	.word	0x20000000
+ 800014c:	00000000 	.word	0x00000000
+ 8000150:	080004b8 	.word	0x080004b8
+
+08000154 <frame_dummy>:
+ 8000154:	b508      	push	{r3, lr}
+ 8000156:	4b03      	ldr	r3, [pc, #12]	@ (8000164 <frame_dummy+0x10>)
+ 8000158:	b11b      	cbz	r3, 8000162 <frame_dummy+0xe>
+ 800015a:	4903      	ldr	r1, [pc, #12]	@ (8000168 <frame_dummy+0x14>)
+ 800015c:	4803      	ldr	r0, [pc, #12]	@ (800016c <frame_dummy+0x18>)
+ 800015e:	f3af 8000 	nop.w
+ 8000162:	bd08      	pop	{r3, pc}
+ 8000164:	00000000 	.word	0x00000000
+ 8000168:	20000004 	.word	0x20000004
+ 800016c:	080004b8 	.word	0x080004b8
+
+08000170 <EXTI_voidClearPendingFlag>:
+* Parameters (in):    	EXTI_LINE_t
+* Parameters (out):   	void
+* Return value:      	void
+********************************************************************************/
+void EXTI_voidClearPendingFlag(EXTI_LINE_t Local_u8Line)
+{
+ 8000170:	b480      	push	{r7}
+ 8000172:	b083      	sub	sp, #12
+ 8000174:	af00      	add	r7, sp, #0
+ 8000176:	4603      	mov	r3, r0
+ 8000178:	71fb      	strb	r3, [r7, #7]
+	/* Clear Pending Flag */
+	EXTI->PR |= (ONE_BIT_MASK << Local_u8Line);
+ 800017a:	4b07      	ldr	r3, [pc, #28]	@ (8000198 <EXTI_voidClearPendingFlag+0x28>)
+ 800017c:	695b      	ldr	r3, [r3, #20]
+ 800017e:	79fa      	ldrb	r2, [r7, #7]
+ 8000180:	2101      	movs	r1, #1
+ 8000182:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000186:	4611      	mov	r1, r2
+ 8000188:	4a03      	ldr	r2, [pc, #12]	@ (8000198 <EXTI_voidClearPendingFlag+0x28>)
+ 800018a:	430b      	orrs	r3, r1
+ 800018c:	6153      	str	r3, [r2, #20]
+}
+ 800018e:	bf00      	nop
+ 8000190:	370c      	adds	r7, #12
+ 8000192:	46bd      	mov	sp, r7
+ 8000194:	bc80      	pop	{r7}
+ 8000196:	4770      	bx	lr
+ 8000198:	40010400 	.word	0x40010400
+
+0800019c <EXTI_voidReadPendingFlag>:
+* Parameters (in):    	Interrupt_t
+* Parameters (out):   	uint8_t
+* Return value:      	uint8_t
+********************************************************************************/
+uint8_t EXTI_voidReadPendingFlag(EXTI_LINE_t Local_u8Line)
+{
+ 800019c:	b480      	push	{r7}
+ 800019e:	b083      	sub	sp, #12
+ 80001a0:	af00      	add	r7, sp, #0
+ 80001a2:	4603      	mov	r3, r0
+ 80001a4:	71fb      	strb	r3, [r7, #7]
+	/* Return Pending Flag */
+	return ( (EXTI->PR >> Local_u8Line) & 0x01 );
+ 80001a6:	4b07      	ldr	r3, [pc, #28]	@ (80001c4 <EXTI_voidReadPendingFlag+0x28>)
+ 80001a8:	695a      	ldr	r2, [r3, #20]
+ 80001aa:	79fb      	ldrb	r3, [r7, #7]
+ 80001ac:	fa22 f303 	lsr.w	r3, r2, r3
+ 80001b0:	b2db      	uxtb	r3, r3
+ 80001b2:	f003 0301 	and.w	r3, r3, #1
+ 80001b6:	b2db      	uxtb	r3, r3
+}
+ 80001b8:	4618      	mov	r0, r3
+ 80001ba:	370c      	adds	r7, #12
+ 80001bc:	46bd      	mov	sp, r7
+ 80001be:	bc80      	pop	{r7}
+ 80001c0:	4770      	bx	lr
+ 80001c2:	bf00      	nop
+ 80001c4:	40010400 	.word	0x40010400
+
+080001c8 <EXTI0_IRQHandler>:
+/*==============================================================================================================================================
+ * HANDLERS SECTION: the ISR when the external interrupt happens
+ *==============================================================================================================================================*/
+
+void EXTI0_IRQHandler(void)
+{
+ 80001c8:	b580      	push	{r7, lr}
+ 80001ca:	af00      	add	r7, sp, #0
+	/* Clear Pending Flag as it's doesn't cleared by H.W. after entering the ISR */
+	EXTI_voidClearPendingFlag(EXTI0);
+ 80001cc:	2000      	movs	r0, #0
+ 80001ce:	f7ff ffcf 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+	/* IF not empty then we passed a needed function from main using EXTI_voidSetCallBack f(x) */
+	if (EXTI_PTR_TO_FUNCTION[EXTI0] != NULL)
+ 80001d2:	4b04      	ldr	r3, [pc, #16]	@ (80001e4 <EXTI0_IRQHandler+0x1c>)
+ 80001d4:	681b      	ldr	r3, [r3, #0]
+ 80001d6:	2b00      	cmp	r3, #0
+ 80001d8:	d002      	beq.n	80001e0 <EXTI0_IRQHandler+0x18>
+	{
+		EXTI_PTR_TO_FUNCTION[EXTI0]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 80001da:	4b02      	ldr	r3, [pc, #8]	@ (80001e4 <EXTI0_IRQHandler+0x1c>)
+ 80001dc:	681b      	ldr	r3, [r3, #0]
+ 80001de:	4798      	blx	r3
+	}
+}
+ 80001e0:	bf00      	nop
+ 80001e2:	bd80      	pop	{r7, pc}
+ 80001e4:	2000001c 	.word	0x2000001c
+
+080001e8 <EXTI2_IRQHandler>:
+
+void EXTI2_IRQHandler(void)
+{
+ 80001e8:	b580      	push	{r7, lr}
+ 80001ea:	af00      	add	r7, sp, #0
+	/* Clear Pending Flag */
+	EXTI_voidClearPendingFlag(EXTI2);
+ 80001ec:	2002      	movs	r0, #2
+ 80001ee:	f7ff ffbf 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+	if (EXTI_PTR_TO_FUNCTION[EXTI2] != NULL)
+ 80001f2:	4b04      	ldr	r3, [pc, #16]	@ (8000204 <EXTI2_IRQHandler+0x1c>)
+ 80001f4:	689b      	ldr	r3, [r3, #8]
+ 80001f6:	2b00      	cmp	r3, #0
+ 80001f8:	d002      	beq.n	8000200 <EXTI2_IRQHandler+0x18>
+	{
+		EXTI_PTR_TO_FUNCTION[EXTI2]();
+ 80001fa:	4b02      	ldr	r3, [pc, #8]	@ (8000204 <EXTI2_IRQHandler+0x1c>)
+ 80001fc:	689b      	ldr	r3, [r3, #8]
+ 80001fe:	4798      	blx	r3
+	}
+}
+ 8000200:	bf00      	nop
+ 8000202:	bd80      	pop	{r7, pc}
+ 8000204:	2000001c 	.word	0x2000001c
+
+08000208 <EXTI3_IRQHandler>:
+
+void EXTI3_IRQHandler(void)
+{
+ 8000208:	b580      	push	{r7, lr}
+ 800020a:	af00      	add	r7, sp, #0
+	/* Clear Pending Flag */
+	EXTI_voidClearPendingFlag(EXTI3);
+ 800020c:	2003      	movs	r0, #3
+ 800020e:	f7ff ffaf 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+	if (EXTI_PTR_TO_FUNCTION[EXTI3] != NULL)
+ 8000212:	4b04      	ldr	r3, [pc, #16]	@ (8000224 <EXTI3_IRQHandler+0x1c>)
+ 8000214:	68db      	ldr	r3, [r3, #12]
+ 8000216:	2b00      	cmp	r3, #0
+ 8000218:	d002      	beq.n	8000220 <EXTI3_IRQHandler+0x18>
+	{
+		EXTI_PTR_TO_FUNCTION[EXTI3]();
+ 800021a:	4b02      	ldr	r3, [pc, #8]	@ (8000224 <EXTI3_IRQHandler+0x1c>)
+ 800021c:	68db      	ldr	r3, [r3, #12]
+ 800021e:	4798      	blx	r3
+	}
+}
+ 8000220:	bf00      	nop
+ 8000222:	bd80      	pop	{r7, pc}
+ 8000224:	2000001c 	.word	0x2000001c
+
+08000228 <EXTI4_IRQHandler>:
+
+void EXTI4_IRQHandler(void)
+{
+ 8000228:	b580      	push	{r7, lr}
+ 800022a:	af00      	add	r7, sp, #0
+	/* Clear Pending Flag */
+	EXTI_voidClearPendingFlag(EXTI4);
+ 800022c:	2004      	movs	r0, #4
+ 800022e:	f7ff ff9f 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+	if (EXTI_PTR_TO_FUNCTION[EXTI4] != NULL)
+ 8000232:	4b04      	ldr	r3, [pc, #16]	@ (8000244 <EXTI4_IRQHandler+0x1c>)
+ 8000234:	691b      	ldr	r3, [r3, #16]
+ 8000236:	2b00      	cmp	r3, #0
+ 8000238:	d002      	beq.n	8000240 <EXTI4_IRQHandler+0x18>
+	{
+		EXTI_PTR_TO_FUNCTION[EXTI4]();
+ 800023a:	4b02      	ldr	r3, [pc, #8]	@ (8000244 <EXTI4_IRQHandler+0x1c>)
+ 800023c:	691b      	ldr	r3, [r3, #16]
+ 800023e:	4798      	blx	r3
+	}
+}
+ 8000240:	bf00      	nop
+ 8000242:	bd80      	pop	{r7, pc}
+ 8000244:	2000001c 	.word	0x2000001c
+
+08000248 <EXTI9_5_IRQHandler>:
+
+void EXTI9_5_IRQHandler(void)
+{
+ 8000248:	b580      	push	{r7, lr}
+ 800024a:	af00      	add	r7, sp, #0
+	if( EXTI_voidReadPendingFlag(EXTI5) )
+ 800024c:	2005      	movs	r0, #5
+ 800024e:	f7ff ffa5 	bl	800019c <EXTI_voidReadPendingFlag>
+ 8000252:	4603      	mov	r3, r0
+ 8000254:	2b00      	cmp	r3, #0
+ 8000256:	d00a      	beq.n	800026e <EXTI9_5_IRQHandler+0x26>
+	{
+		/* Clear Pending Flag as it's doesn't cleared by H.W. after entering the ISR */
+		EXTI_voidClearPendingFlag(EXTI5);
+ 8000258:	2005      	movs	r0, #5
+ 800025a:	f7ff ff89 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+		/* IF not empty then we passed a needed function from main using EXTI_voidSetCallBack f(x) */
+		if (EXTI_PTR_TO_FUNCTION[EXTI5] != NULL)
+ 800025e:	4b26      	ldr	r3, [pc, #152]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 8000260:	695b      	ldr	r3, [r3, #20]
+ 8000262:	2b00      	cmp	r3, #0
+ 8000264:	d046      	beq.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+		{
+			EXTI_PTR_TO_FUNCTION[EXTI5]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 8000266:	4b24      	ldr	r3, [pc, #144]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 8000268:	695b      	ldr	r3, [r3, #20]
+ 800026a:	4798      	blx	r3
+		if (EXTI_PTR_TO_FUNCTION[EXTI9] != NULL)
+		{
+			EXTI_PTR_TO_FUNCTION[EXTI9]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+		}
+	}
+}
+ 800026c:	e042      	b.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+	else if( EXTI_voidReadPendingFlag(EXTI6) )
+ 800026e:	2006      	movs	r0, #6
+ 8000270:	f7ff ff94 	bl	800019c <EXTI_voidReadPendingFlag>
+ 8000274:	4603      	mov	r3, r0
+ 8000276:	2b00      	cmp	r3, #0
+ 8000278:	d00a      	beq.n	8000290 <EXTI9_5_IRQHandler+0x48>
+		EXTI_voidClearPendingFlag(EXTI6);
+ 800027a:	2006      	movs	r0, #6
+ 800027c:	f7ff ff78 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI6] != NULL)
+ 8000280:	4b1d      	ldr	r3, [pc, #116]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 8000282:	699b      	ldr	r3, [r3, #24]
+ 8000284:	2b00      	cmp	r3, #0
+ 8000286:	d035      	beq.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+			EXTI_PTR_TO_FUNCTION[EXTI6]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 8000288:	4b1b      	ldr	r3, [pc, #108]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 800028a:	699b      	ldr	r3, [r3, #24]
+ 800028c:	4798      	blx	r3
+}
+ 800028e:	e031      	b.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+	else if( EXTI_voidReadPendingFlag(EXTI7) )
+ 8000290:	2007      	movs	r0, #7
+ 8000292:	f7ff ff83 	bl	800019c <EXTI_voidReadPendingFlag>
+ 8000296:	4603      	mov	r3, r0
+ 8000298:	2b00      	cmp	r3, #0
+ 800029a:	d00a      	beq.n	80002b2 <EXTI9_5_IRQHandler+0x6a>
+		EXTI_voidClearPendingFlag(EXTI7);
+ 800029c:	2007      	movs	r0, #7
+ 800029e:	f7ff ff67 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI7] != NULL)
+ 80002a2:	4b15      	ldr	r3, [pc, #84]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 80002a4:	69db      	ldr	r3, [r3, #28]
+ 80002a6:	2b00      	cmp	r3, #0
+ 80002a8:	d024      	beq.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+			EXTI_PTR_TO_FUNCTION[EXTI7]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 80002aa:	4b13      	ldr	r3, [pc, #76]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 80002ac:	69db      	ldr	r3, [r3, #28]
+ 80002ae:	4798      	blx	r3
+}
+ 80002b0:	e020      	b.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+	else if( EXTI_voidReadPendingFlag(EXTI8) )
+ 80002b2:	2008      	movs	r0, #8
+ 80002b4:	f7ff ff72 	bl	800019c <EXTI_voidReadPendingFlag>
+ 80002b8:	4603      	mov	r3, r0
+ 80002ba:	2b00      	cmp	r3, #0
+ 80002bc:	d00a      	beq.n	80002d4 <EXTI9_5_IRQHandler+0x8c>
+		EXTI_voidClearPendingFlag(EXTI8);
+ 80002be:	2008      	movs	r0, #8
+ 80002c0:	f7ff ff56 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI8] != NULL)
+ 80002c4:	4b0c      	ldr	r3, [pc, #48]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 80002c6:	6a1b      	ldr	r3, [r3, #32]
+ 80002c8:	2b00      	cmp	r3, #0
+ 80002ca:	d013      	beq.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+			EXTI_PTR_TO_FUNCTION[EXTI8]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 80002cc:	4b0a      	ldr	r3, [pc, #40]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 80002ce:	6a1b      	ldr	r3, [r3, #32]
+ 80002d0:	4798      	blx	r3
+}
+ 80002d2:	e00f      	b.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+	else if( EXTI_voidReadPendingFlag(EXTI9) )
+ 80002d4:	2009      	movs	r0, #9
+ 80002d6:	f7ff ff61 	bl	800019c <EXTI_voidReadPendingFlag>
+ 80002da:	4603      	mov	r3, r0
+ 80002dc:	2b00      	cmp	r3, #0
+ 80002de:	d009      	beq.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+		EXTI_voidClearPendingFlag(EXTI9);
+ 80002e0:	2009      	movs	r0, #9
+ 80002e2:	f7ff ff45 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI9] != NULL)
+ 80002e6:	4b04      	ldr	r3, [pc, #16]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 80002e8:	6a5b      	ldr	r3, [r3, #36]	@ 0x24
+ 80002ea:	2b00      	cmp	r3, #0
+ 80002ec:	d002      	beq.n	80002f4 <EXTI9_5_IRQHandler+0xac>
+			EXTI_PTR_TO_FUNCTION[EXTI9]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 80002ee:	4b02      	ldr	r3, [pc, #8]	@ (80002f8 <EXTI9_5_IRQHandler+0xb0>)
+ 80002f0:	6a5b      	ldr	r3, [r3, #36]	@ 0x24
+ 80002f2:	4798      	blx	r3
+}
+ 80002f4:	bf00      	nop
+ 80002f6:	bd80      	pop	{r7, pc}
+ 80002f8:	2000001c 	.word	0x2000001c
+
+080002fc <EXTI15_10_IRQHandler>:
+
+void EXTI15_10_IRQHandler(void)
+{
+ 80002fc:	b580      	push	{r7, lr}
+ 80002fe:	af00      	add	r7, sp, #0
+	if( EXTI_voidReadPendingFlag(EXTI10) )
+ 8000300:	200a      	movs	r0, #10
+ 8000302:	f7ff ff4b 	bl	800019c <EXTI_voidReadPendingFlag>
+ 8000306:	4603      	mov	r3, r0
+ 8000308:	2b00      	cmp	r3, #0
+ 800030a:	d00a      	beq.n	8000322 <EXTI15_10_IRQHandler+0x26>
+	{
+		/* Clear Pending Flag as it's doesn't cleared by H.W. after entering the ISR */
+		EXTI_voidClearPendingFlag(EXTI10);
+ 800030c:	200a      	movs	r0, #10
+ 800030e:	f7ff ff2f 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+		/* IF not empty then we passed a needed function from main using EXTI_voidSetCallBack f(x) */
+		if (EXTI_PTR_TO_FUNCTION[EXTI10] != NULL)
+ 8000312:	4b2f      	ldr	r3, [pc, #188]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 8000314:	6a9b      	ldr	r3, [r3, #40]	@ 0x28
+ 8000316:	2b00      	cmp	r3, #0
+ 8000318:	d057      	beq.n	80003ca <EXTI15_10_IRQHandler+0xce>
+		{
+			EXTI_PTR_TO_FUNCTION[EXTI10]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 800031a:	4b2d      	ldr	r3, [pc, #180]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 800031c:	6a9b      	ldr	r3, [r3, #40]	@ 0x28
+ 800031e:	4798      	blx	r3
+		if (EXTI_PTR_TO_FUNCTION[EXTI16] != NULL)
+		{
+			EXTI_PTR_TO_FUNCTION[EXTI17]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+		}
+	}
+}
+ 8000320:	e053      	b.n	80003ca <EXTI15_10_IRQHandler+0xce>
+	else if( EXTI_voidReadPendingFlag(EXTI11) )
+ 8000322:	200b      	movs	r0, #11
+ 8000324:	f7ff ff3a 	bl	800019c <EXTI_voidReadPendingFlag>
+ 8000328:	4603      	mov	r3, r0
+ 800032a:	2b00      	cmp	r3, #0
+ 800032c:	d00a      	beq.n	8000344 <EXTI15_10_IRQHandler+0x48>
+		EXTI_voidClearPendingFlag(EXTI11);
+ 800032e:	200b      	movs	r0, #11
+ 8000330:	f7ff ff1e 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI11] != NULL)
+ 8000334:	4b26      	ldr	r3, [pc, #152]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 8000336:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 8000338:	2b00      	cmp	r3, #0
+ 800033a:	d046      	beq.n	80003ca <EXTI15_10_IRQHandler+0xce>
+			EXTI_PTR_TO_FUNCTION[EXTI11]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 800033c:	4b24      	ldr	r3, [pc, #144]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 800033e:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 8000340:	4798      	blx	r3
+}
+ 8000342:	e042      	b.n	80003ca <EXTI15_10_IRQHandler+0xce>
+	else if( EXTI_voidReadPendingFlag(EXTI12) )
+ 8000344:	200c      	movs	r0, #12
+ 8000346:	f7ff ff29 	bl	800019c <EXTI_voidReadPendingFlag>
+ 800034a:	4603      	mov	r3, r0
+ 800034c:	2b00      	cmp	r3, #0
+ 800034e:	d00a      	beq.n	8000366 <EXTI15_10_IRQHandler+0x6a>
+		EXTI_voidClearPendingFlag(EXTI12);
+ 8000350:	200c      	movs	r0, #12
+ 8000352:	f7ff ff0d 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI12] != NULL)
+ 8000356:	4b1e      	ldr	r3, [pc, #120]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 8000358:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 800035a:	2b00      	cmp	r3, #0
+ 800035c:	d035      	beq.n	80003ca <EXTI15_10_IRQHandler+0xce>
+			EXTI_PTR_TO_FUNCTION[EXTI12]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 800035e:	4b1c      	ldr	r3, [pc, #112]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 8000360:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 8000362:	4798      	blx	r3
+}
+ 8000364:	e031      	b.n	80003ca <EXTI15_10_IRQHandler+0xce>
+	else if( EXTI_voidReadPendingFlag(EXTI13) )
+ 8000366:	200d      	movs	r0, #13
+ 8000368:	f7ff ff18 	bl	800019c <EXTI_voidReadPendingFlag>
+ 800036c:	4603      	mov	r3, r0
+ 800036e:	2b00      	cmp	r3, #0
+ 8000370:	d00a      	beq.n	8000388 <EXTI15_10_IRQHandler+0x8c>
+		EXTI_voidClearPendingFlag(EXTI13);
+ 8000372:	200d      	movs	r0, #13
+ 8000374:	f7ff fefc 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI13] != NULL)
+ 8000378:	4b15      	ldr	r3, [pc, #84]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 800037a:	6b5b      	ldr	r3, [r3, #52]	@ 0x34
+ 800037c:	2b00      	cmp	r3, #0
+ 800037e:	d024      	beq.n	80003ca <EXTI15_10_IRQHandler+0xce>
+			EXTI_PTR_TO_FUNCTION[EXTI13]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 8000380:	4b13      	ldr	r3, [pc, #76]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 8000382:	6b5b      	ldr	r3, [r3, #52]	@ 0x34
+ 8000384:	4798      	blx	r3
+}
+ 8000386:	e020      	b.n	80003ca <EXTI15_10_IRQHandler+0xce>
+	else if( EXTI_voidReadPendingFlag(EXTI14) )
+ 8000388:	200e      	movs	r0, #14
+ 800038a:	f7ff ff07 	bl	800019c <EXTI_voidReadPendingFlag>
+ 800038e:	4603      	mov	r3, r0
+ 8000390:	2b00      	cmp	r3, #0
+ 8000392:	d00a      	beq.n	80003aa <EXTI15_10_IRQHandler+0xae>
+		EXTI_voidClearPendingFlag(EXTI14);
+ 8000394:	200e      	movs	r0, #14
+ 8000396:	f7ff feeb 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI14] != NULL)
+ 800039a:	4b0d      	ldr	r3, [pc, #52]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 800039c:	6b9b      	ldr	r3, [r3, #56]	@ 0x38
+ 800039e:	2b00      	cmp	r3, #0
+ 80003a0:	d013      	beq.n	80003ca <EXTI15_10_IRQHandler+0xce>
+			EXTI_PTR_TO_FUNCTION[EXTI14]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 80003a2:	4b0b      	ldr	r3, [pc, #44]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 80003a4:	6b9b      	ldr	r3, [r3, #56]	@ 0x38
+ 80003a6:	4798      	blx	r3
+}
+ 80003a8:	e00f      	b.n	80003ca <EXTI15_10_IRQHandler+0xce>
+	else if( EXTI_voidReadPendingFlag(EXTI15) )
+ 80003aa:	200f      	movs	r0, #15
+ 80003ac:	f7ff fef6 	bl	800019c <EXTI_voidReadPendingFlag>
+ 80003b0:	4603      	mov	r3, r0
+ 80003b2:	2b00      	cmp	r3, #0
+ 80003b4:	d009      	beq.n	80003ca <EXTI15_10_IRQHandler+0xce>
+		EXTI_voidClearPendingFlag(EXTI15);
+ 80003b6:	200f      	movs	r0, #15
+ 80003b8:	f7ff feda 	bl	8000170 <EXTI_voidClearPendingFlag>
+		if (EXTI_PTR_TO_FUNCTION[EXTI16] != NULL)
+ 80003bc:	4b04      	ldr	r3, [pc, #16]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 80003be:	6c1b      	ldr	r3, [r3, #64]	@ 0x40
+ 80003c0:	2b00      	cmp	r3, #0
+ 80003c2:	d002      	beq.n	80003ca <EXTI15_10_IRQHandler+0xce>
+			EXTI_PTR_TO_FUNCTION[EXTI17]();	/* Make the required f(x) that passed from main using EXTI_voidSetCallBack */
+ 80003c4:	4b02      	ldr	r3, [pc, #8]	@ (80003d0 <EXTI15_10_IRQHandler+0xd4>)
+ 80003c6:	6c5b      	ldr	r3, [r3, #68]	@ 0x44
+ 80003c8:	4798      	blx	r3
+}
+ 80003ca:	bf00      	nop
+ 80003cc:	bd80      	pop	{r7, pc}
+ 80003ce:	bf00      	nop
+ 80003d0:	2000001c 	.word	0x2000001c
+
+080003d4 <PVD_IRQHandler>:
+ *  EXTI line 19 is connected to the Ethernet Wake-up event available only in connectivity line devices)
+*/
+
+/*  EXTI line 16 is connected to the PVD output */
+void PVD_IRQHandler(void)
+{
+ 80003d4:	b580      	push	{r7, lr}
+ 80003d6:	af00      	add	r7, sp, #0
+	/* Clear Pending Flag */
+	EXTI_voidClearPendingFlag(EXTI16);
+ 80003d8:	2010      	movs	r0, #16
+ 80003da:	f7ff fec9 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+	if (EXTI_PTR_TO_FUNCTION[EXTI16] != NULL)
+ 80003de:	4b04      	ldr	r3, [pc, #16]	@ (80003f0 <PVD_IRQHandler+0x1c>)
+ 80003e0:	6c1b      	ldr	r3, [r3, #64]	@ 0x40
+ 80003e2:	2b00      	cmp	r3, #0
+ 80003e4:	d002      	beq.n	80003ec <PVD_IRQHandler+0x18>
+	{
+		EXTI_PTR_TO_FUNCTION[EXTI16]();
+ 80003e6:	4b02      	ldr	r3, [pc, #8]	@ (80003f0 <PVD_IRQHandler+0x1c>)
+ 80003e8:	6c1b      	ldr	r3, [r3, #64]	@ 0x40
+ 80003ea:	4798      	blx	r3
+	}
+}
+ 80003ec:	bf00      	nop
+ 80003ee:	bd80      	pop	{r7, pc}
+ 80003f0:	2000001c 	.word	0x2000001c
+
+080003f4 <RTCAlarm_IRQHandler>:
+/*   EXTI line 17 is connected to the RTC Alarm event
+ *  --> RTC alarm through EXTI line interrupt */
+void RTCAlarm_IRQHandler(void)
+{
+ 80003f4:	b580      	push	{r7, lr}
+ 80003f6:	af00      	add	r7, sp, #0
+	/* Clear Pending Flag */
+	EXTI_voidClearPendingFlag(EXTI17);
+ 80003f8:	2011      	movs	r0, #17
+ 80003fa:	f7ff feb9 	bl	8000170 <EXTI_voidClearPendingFlag>
+
+	if (EXTI_PTR_TO_FUNCTION[EXTI17] != NULL)
+ 80003fe:	4b04      	ldr	r3, [pc, #16]	@ (8000410 <RTCAlarm_IRQHandler+0x1c>)
+ 8000400:	6c5b      	ldr	r3, [r3, #68]	@ 0x44
+ 8000402:	2b00      	cmp	r3, #0
+ 8000404:	d002      	beq.n	800040c <RTCAlarm_IRQHandler+0x18>
+	{
+		EXTI_PTR_TO_FUNCTION[EXTI17]();
+ 8000406:	4b02      	ldr	r3, [pc, #8]	@ (8000410 <RTCAlarm_IRQHandler+0x1c>)
+ 8000408:	6c5b      	ldr	r3, [r3, #68]	@ 0x44
+ 800040a:	4798      	blx	r3
+	}
+}
+ 800040c:	bf00      	nop
+ 800040e:	bd80      	pop	{r7, pc}
+ 8000410:	2000001c 	.word	0x2000001c
+
+08000414 <main>:
+#if !defined(__SOFT_FP__) && defined(__ARM_FP)
+  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
+#endif
+
+int main(void)
+{
+ 8000414:	b480      	push	{r7}
+ 8000416:	af00      	add	r7, sp, #0
+    /* Loop forever */
+	for(;;);
+ 8000418:	bf00      	nop
+ 800041a:	e7fd      	b.n	8000418 <main+0x4>
+
+0800041c <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 800041c:	480d      	ldr	r0, [pc, #52]	@ (8000454 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 800041e:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 8000420:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8000424:	480c      	ldr	r0, [pc, #48]	@ (8000458 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8000426:	490d      	ldr	r1, [pc, #52]	@ (800045c <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000428:	4a0d      	ldr	r2, [pc, #52]	@ (8000460 <LoopForever+0xe>)
+  movs r3, #0
+ 800042a:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 800042c:	e002      	b.n	8000434 <LoopCopyDataInit>
+
+0800042e <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 800042e:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 8000430:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 8000432:	3304      	adds	r3, #4
+
+08000434 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8000434:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8000436:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000438:	d3f9      	bcc.n	800042e <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 800043a:	4a0a      	ldr	r2, [pc, #40]	@ (8000464 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 800043c:	4c0a      	ldr	r4, [pc, #40]	@ (8000468 <LoopForever+0x16>)
+  movs r3, #0
+ 800043e:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8000440:	e001      	b.n	8000446 <LoopFillZerobss>
+
+08000442 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8000442:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000444:	3204      	adds	r2, #4
+
+08000446 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8000446:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000448:	d3fb      	bcc.n	8000442 <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 800044a:	f000 f811 	bl	8000470 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 800044e:	f7ff ffe1 	bl	8000414 <main>
+
+08000452 <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 8000452:	e7fe      	b.n	8000452 <LoopForever>
+  ldr   r0, =_estack
+ 8000454:	20005000 	.word	0x20005000
+  ldr r0, =_sdata
+ 8000458:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 800045c:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 8000460:	080004d8 	.word	0x080004d8
+  ldr r2, =_sbss
+ 8000464:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 8000468:	2000006c 	.word	0x2000006c
+
+0800046c <ADC1_2_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 800046c:	e7fe      	b.n	800046c <ADC1_2_IRQHandler>
+	...
+
+08000470 <__libc_init_array>:
+ 8000470:	b570      	push	{r4, r5, r6, lr}
+ 8000472:	2600      	movs	r6, #0
+ 8000474:	4d0c      	ldr	r5, [pc, #48]	@ (80004a8 <__libc_init_array+0x38>)
+ 8000476:	4c0d      	ldr	r4, [pc, #52]	@ (80004ac <__libc_init_array+0x3c>)
+ 8000478:	1b64      	subs	r4, r4, r5
+ 800047a:	10a4      	asrs	r4, r4, #2
+ 800047c:	42a6      	cmp	r6, r4
+ 800047e:	d109      	bne.n	8000494 <__libc_init_array+0x24>
+ 8000480:	f000 f81a 	bl	80004b8 <_init>
+ 8000484:	2600      	movs	r6, #0
+ 8000486:	4d0a      	ldr	r5, [pc, #40]	@ (80004b0 <__libc_init_array+0x40>)
+ 8000488:	4c0a      	ldr	r4, [pc, #40]	@ (80004b4 <__libc_init_array+0x44>)
+ 800048a:	1b64      	subs	r4, r4, r5
+ 800048c:	10a4      	asrs	r4, r4, #2
+ 800048e:	42a6      	cmp	r6, r4
+ 8000490:	d105      	bne.n	800049e <__libc_init_array+0x2e>
+ 8000492:	bd70      	pop	{r4, r5, r6, pc}
+ 8000494:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000498:	4798      	blx	r3
+ 800049a:	3601      	adds	r6, #1
+ 800049c:	e7ee      	b.n	800047c <__libc_init_array+0xc>
+ 800049e:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80004a2:	4798      	blx	r3
+ 80004a4:	3601      	adds	r6, #1
+ 80004a6:	e7f2      	b.n	800048e <__libc_init_array+0x1e>
+ 80004a8:	080004d0 	.word	0x080004d0
+ 80004ac:	080004d0 	.word	0x080004d0
+ 80004b0:	080004d0 	.word	0x080004d0
+ 80004b4:	080004d4 	.word	0x080004d4
+
+080004b8 <_init>:
+ 80004b8:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80004ba:	bf00      	nop
+ 80004bc:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80004be:	bc08      	pop	{r3}
+ 80004c0:	469e      	mov	lr, r3
+ 80004c2:	4770      	bx	lr
+
+080004c4 <_fini>:
+ 80004c4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80004c6:	bf00      	nop
+ 80004c8:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80004ca:	bc08      	pop	{r3}
+ 80004cc:	469e      	mov	lr, r3
+ 80004ce:	4770      	bx	lr

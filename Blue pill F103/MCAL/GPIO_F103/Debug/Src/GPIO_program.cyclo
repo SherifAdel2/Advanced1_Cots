@@ -1,0 +1,4 @@
+../Src/GPIO_program.c:26:9:GPIO_u8PinInit	7
+../Src/GPIO_program.c:88:9:GPIO_u8SetPinValue	5
+../Src/GPIO_program.c:123:9:GPIO_u8TogglePinValue	3
+../Src/GPIO_program.c:145:9:GPIO_u8GetPinValue	3

@@ -1,0 +1,7 @@
+../Src/RCC_program.c:36:4:RCC_set_CLK_status	25
+../Src/RCC_program.c:111:4:RCC_void_set_SYS_CLK	5
+../Src/RCC_program.c:141:6:RCC_void_HSE_config	1
+../Src/RCC_program.c:150:6:RCC_void_PLL_config	1
+../Src/RCC_program.c:161:4:RCC_AHB_EnableClk	3
+../Src/RCC_program.c:177:4:RCC_APB1_EnableClk	3
+../Src/RCC_program.c:193:4:RCC_APB2_EnableClk	3
