@@ -2,7 +2,7 @@
 #ifndef GPIO_INTERFACE_H_
 #define GPIO_INTERFACE_H_
 
-#include <stdint.h>	/* Contains types as uint8_t , ... */
+#include <stdint.h>		/* Contains types as uint8_t , ... */
 
 /*******************************************************************************
  *                         Types Declaration                                   *
