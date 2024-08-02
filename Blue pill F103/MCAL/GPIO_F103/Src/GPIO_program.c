@@ -12,9 +12,7 @@
 #include <stdint.h>	/* Contains types as uint8_t , ... */
 
 
-
 static GPIO_RegDef_t* GPIOPort[GPIO_PERIPHERAL_NUM] = { GPIOA, GPIOB, GPIOC, GPIOD, GPIOE};
-
 
 
 /****************************************************************
